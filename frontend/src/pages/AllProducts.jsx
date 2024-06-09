@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import UploadProduct from '../components/UploadProduct'
+import UploadProduct from '../components/UploadProduct.jsx'
 import SummaryApi from '../common'
+import AdminProductCard from '../components/AdminProductCard.jsx'
 
 const AllProducts = () => {
 
@@ -11,7 +12,7 @@ const AllProducts = () => {
     const response =await fetch(SummaryApi.allProduct.url)
     const dataResponse = await response.json()
 
-    console.log("product data",dataResponse)
+    // console.log("product data",dataResponse)
 
     setAllProduct(dataResponse?.data||[])
   }
@@ -28,13 +29,12 @@ const AllProducts = () => {
         </div>
 
         {/* all products */}
-        <div className='flex items-center gap-5 py-4'>
+        <div className='flex items-center flex-wrap gap-5 py-4 h-[calc(100vh-190px)] overflow-y-scroll'>
           {
             allProduct.map((product,index)=>{
               return(
-                <div className='bg-white p-4 rounded'>
-                  <img src={product?.productImae[0]} width={120} height={120} alt="" />
-                </div>
+                <AdminProductCard data={product} key={index+"allProduct"} fetchdata={fetchAllProduct}/>
+                
               )
             })
           }
@@ -44,7 +44,7 @@ const AllProducts = () => {
         {/* upload product component */}
         {
           openUploadProduct && (
-            <UploadProduct onClose={()=>setOpenUploadProduct(false)}/>
+            <UploadProduct onClose={()=>setOpenUploadProduct(false)} fetchData={fetchAllProduct}/>
           )
         }
         
